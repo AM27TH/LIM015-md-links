@@ -1,4 +1,36 @@
 {
-  "name": "md-links",
-  "version": "0.1.0"
+  "name": "am27th-mdlinks",
+  "version": "0.1.0",
+  "description": "Library that checks the status of links in md files",
+  "main": "src/index.js",
+  "bin": {
+    "md-links": "src/cli.js"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "eslint": "eslint --ext .js src/ test/",
+    "pretest": "npm run eslint",
+    "test": "jest --verbose --coverage",
+    "start": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AM27TH/LIM015-md-links.git"
+  },
+  "keywords": [
+    "node",
+    "md"
+  ],
+  "author": "Anghel Melanie Trillo Hernández <amelanie.trillo27@gmail.com> (https://github.com/AM27TH)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AM27TH/LIM015-md-links/issues"
+  },
+  "homepage": "https://github.com/AM27TH/LIM015-md-links#readme",
+  "devDependencies": {
+    "eslint": "^7.31.0",
+    "jest": "^27.0.6"
+  }
 }
