@@ -2,7 +2,7 @@
   "name": "am27th-mdlinks",
   "version": "0.1.0",
   "description": "Library that checks the status of links in md files",
-  "main": "src/index.js",
+  "main": "src/mdLinks.js",
   "bin": {
     "md-links": "src/cli.js"
   },
@@ -13,7 +13,7 @@
     "eslint": "eslint --ext .js src/ test/",
     "pretest": "npm run eslint",
     "test": "jest --verbose --coverage",
-    "start": "node src/index.js"
+    "start": "node src/mdLinks.js"
   },
   "repository": {
     "type": "git",
@@ -32,5 +32,8 @@
   "devDependencies": {
     "eslint": "^7.31.0",
     "jest": "^27.0.6"
+  },
+  "dependencies": {
+    "chalk": "^4.1.1"
   }
 }
