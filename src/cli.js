@@ -12,6 +12,9 @@ function mdLinks(argv){
     case '--stats,--validate':
       options = { validate: true, stats: true};
       break;
+    case '--validate,--stats':
+      options = { validate: true, stats: true};
+      break;
     case '--validate':
       options = { validate: true, stats: false};
       break;
@@ -24,12 +27,19 @@ function mdLinks(argv){
   API.mdLinks(path, options)
   .then(links => {
     if (options.stats) {
-      //stats.
-      //if validate
+      const totalLinks = links.length;
+      let uniqueLinks = totalLinks; //falta implementar
+      if(options.validate){
+        const brokenLinks = links.filter(link => link.ok === false).length;
+        uniqueLinks = totalLinks-brokenLinks;
+        console.log(color.cyanBright('Total: ',totalLinks) + '\n' + color.green('Unique: ',uniqueLinks) + '\n' + color.red('Broken: ',brokenLinks));
+      }else{
+        console.log(color.cyanBright('Total: ',totalLinks) + '\n' + color.green('Unique: ',uniqueLinks));
+      }
     }else{
       links.forEach((link) => {
         console.log(color.magenta(link.file), color.cyan(link.href),
-          (options.validate)? ((link.ok === 'ok')? color.green(link.ok, link.status):color.red(link.ok, link.status)): '',
+          (options.validate)?((link.ok)? color.green('ok', link.status): color.red('fail', link.status)): '',
           link.text);
       });
     }

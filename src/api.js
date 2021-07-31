@@ -44,14 +44,14 @@ const getMdLinksStatus = (links) => Promise.all(links.map((link) =>
     return {
       ...link,
       status: response.status,
-      ok: (response.status>=200 && response.status<=299)? 'ok': 'fail'
+      ok: response.ok
     };
   })
   .catch(() => {
     return {
       ...link,
       status: 'noStatus',
-      ok: 'fail'
+      ok: false
     };
   })
 )).then(statusLinks => { return statusLinks; });
