@@ -5,9 +5,8 @@ const API = require('./mdLinks.js');
 
 const argv = process.argv;
 
-function mdLinks(argv){
-  const path = argv[2];
-  let options = {};
+function commandOptions(argv){
+  let options = {validate: false, stats: false};
   switch(argv.slice(3).join(',')){
     case '--stats,--validate':
       options = { validate: true, stats: true};
@@ -22,8 +21,14 @@ function mdLinks(argv){
       options = { validate: false, stats: true};
       break;
     default:
-      options = {validate: false, stats: false};
+      return options;
   }
+  return options;
+}
+
+function mdLinks(argv){
+  const path = argv[2];
+  let options = commandOptions(argv);
   API.mdLinks(path, options)
   .then(links => {
     if (options.stats) {
