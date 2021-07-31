@@ -18,7 +18,8 @@ describe('mdLinks', () => {
       {
         href: 'https://user-images.githubusercontent.com/110297/42118443-b7a5f1f0-7bc8-11e8-96ad-9cc5593715a6.jpg',
         text: 'md-links',
-        file: __dirname + '\\files\\noEmpty\\link.md'
+        file: __dirname + '\\files\\noEmpty\\link.md',
+        line: 1
       }
     ];
     return expect(mdLinks('./test/files/noEmpty/link.md')).resolves.toEqual(mdLink);
@@ -29,6 +30,7 @@ describe('mdLinks', () => {
         href: 'https://nodejs.og/es/',
         text: 'Node.js',
         file: __dirname + '\\files\\noEmpty\\brokenLink.md',
+        line: 1,
         status: 'noStatus',
         ok: false
       },
@@ -36,6 +38,7 @@ describe('mdLinks', () => {
         href: 'https://user-images.githubusercontent.com/110297/42118443-b7a5f1f0-7bc8-11e8-96ad-9cc5593715a6.jpg',
         text: 'md-links',
         file: __dirname + '\\files\\noEmpty\\link.md',
+        line: 1,
         status: 200,
         ok: true
       }

@@ -65,47 +65,56 @@ describe('Get Md Links', () => {
       {
         href: 'https://nodejs.org/es/',
         text: 'Node.js',
-        file: __dirname + '/files/links.md'
+        file: __dirname + '/files/links.md',
+        line: 1
       },
       {
         href: 'https://developers.google.com/v8/',
         text: 'motor de JavaScript V8 de Chrome',
-        file: __dirname + '/files/links.md'
+        file: __dirname + '/files/links.md',
+        line: 2
       },
       {
         href: 'https://github.com/markdown-it/markdown-it',
         text: 'markdown-it',
-        file: __dirname + '/files/links.md'
+        file: __dirname + '/files/links.md',
+        line: 17
       },
       {
         href: 'https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Regular_Expressions',
         text: 'expresiones regulares (`RegExp`)',
-        file: __dirname + '/files/links.md'
+        file: __dirname + '/files/links.md',
+        line: 21
       },
       {
         href: 'https://github.com/markedjs/marked',
         text: 'marked',
-        file: __dirname + '/files/links.md'
+        file: __dirname + '/files/links.md',
+        line: 23
       },
       {
         href: 'https://github.com/jsdom/jsdom',
         text: 'JSDOM',
-        file: __dirname + '/files/links.md'
+        file: __dirname + '/files/links.md',
+        line: 24
       },
       {
         href: 'https://github.com/cheeriojs/cheerio',
         text: 'Cheerio',
-        file: __dirname + '/files/links.md'
+        file: __dirname + '/files/links.md',
+        line: 25
       },
       {
         href: 'https://github.com/markedjs/marked',
         text: 'marked',
-        file: __dirname + '/files/links.md'
+        file: __dirname + '/files/links.md',
+        line: 26
       },
       {
         href: 'http://community.laboratoria.la/c/js',
         text: 'foro de la comunidad',
-        file: __dirname + '/files/links.md'
+        file: __dirname + '/files/links.md',
+        line: 29
       },
     ];
     expect(getMdLinks([__dirname + '/files/links.md'])).toEqual(mdLinks);

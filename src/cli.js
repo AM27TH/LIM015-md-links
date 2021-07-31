@@ -40,7 +40,7 @@ function mdLinks(argv){
       links.forEach((link) => {
         console.log(color.magenta(link.file), color.cyan(link.href),
           (options.validate)?((link.ok)? color.green('ok', link.status): color.red('fail', link.status)): '',
-          link.text);
+          link.text, link.line);
       });
     }
   })
