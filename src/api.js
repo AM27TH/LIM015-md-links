@@ -16,33 +16,33 @@ const getMdFiles = (route) => {
   return (path.extname(route) === '.md' ? [route]: []);
 };
 
-const getMdLinks = (mdFilesPaths) => {
+const readMdFile = (mdFilePath) => {
   const regexLine = /!*\[(.+?)\]\((https?.+?)\)/gi;
   const regexText = /\[[^\s]+(.+?)\]/gi;
   const regexLink = /\((https?.+?)\)/gi;
-  return mdFilesPaths.reduce((accumulator, mdFilePath) => {
-    const readMdFile = fs.readFileSync(mdFilePath, 'utf-8');
-    const mdLines = readMdFile.split('\r\n');
-    return accumulator.concat(
-      mdLines.reduce((accumulator, line) => {
-      let newLine = line.match(regexLine);
-      if(!newLine) return accumulator;
-      newLine = newLine.toString();
-      const mdLinkHref = line.match(regexLink).join().slice(1, -1);
-      const mdLinkText = line.match(regexText).join().slice(1, -1).substring(0,50);
-      return accumulator.concat({
-            href: mdLinkHref,
-            text: mdLinkText,
-            file: mdFilePath,
-            line: mdLines.indexOf(line) + 1
-          }
-      );
-    }, [])
-    );
+  const readMdFile = fs.readFileSync(mdFilePath, 'utf-8');
+  const mdLines = readMdFile.split('\r\n');
+  return mdLines.reduce((accumulator, line) => {
+    if(!line.match(regexLine)) return accumulator;
+    const mdLinkHref = line.match(regexLink).join().slice(1, -1);
+    const mdLinkText = line.match(regexText).join().slice(1, -1).substring(0,50);
+    const mdLinkLine = mdLines.indexOf(line) + 1;
+    return accumulator.concat({
+      href: mdLinkHref,
+      text: mdLinkText,
+      file: path.relative(__dirname, mdFilePath),
+      line: mdLinkLine
+    });
   }, []);
 };
 
-const getMdLinksStatus = (links) => Promise.all(links.map((link) =>
+const getMdLinks = (mdFilesPaths) => {
+  return mdFilesPaths.reduce((accumulator, mdFilePath) => {
+    return accumulator.concat(readMdFile(mdFilePath));
+  }, []);
+};
+
+const getMdLinksStatus = (links) => Promise.all(links.map(( link =>
   fetch(link.href)
   .then(response => {
     return {
@@ -58,12 +58,13 @@ const getMdLinksStatus = (links) => Promise.all(links.map((link) =>
       ok: false
     };
   })
-)).then(statusLinks => { return statusLinks; });
+))).then(statusLinks => { return statusLinks; });
 
 module.exports = {
   absolutePath,
   validatePath,
   getMdFiles,
+  readMdFile,
   getMdLinks,
   getMdLinksStatus
 };

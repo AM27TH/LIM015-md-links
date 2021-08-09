@@ -1,45 +1,25 @@
 #!/usr/bin/env node
 const process = require('process');
 const color = require('chalk');
-const API = require('./mdLinks.js');
+const API = require('./index.js');
+const { commandOptions }= require('./options.js');
+const { helpMessage } = require('./messages.js');
 
 const argv = process.argv;
 
-function commandOptions(argv){
-  let options = {validate: false, stats: false};
-  switch(argv.slice(3).join(',')){
-    case '--stats,--validate':
-      options = { validate: true, stats: true};
-      break;
-    case '--validate,--stats':
-      options = { validate: true, stats: true};
-      break;
-    case '--validate':
-      options = { validate: true, stats: false};
-      break;
-    case '--stats':
-      options = { validate: false, stats: true};
-      break;
-    default:
-      return options;
-  }
-  return options;
-}
-
-function mdLinks(argv){
-  const path = argv[2];
-  let options = commandOptions(argv);
+function cliMdLinks(argv){
+  const [,, path, ...allOptions] = argv;
+  if(path === '--help') return console.log(helpMessage);
+  const options = commandOptions(allOptions);
   API.mdLinks(path, options)
   .then(links => {
     if (options.stats) {
       const totalLinks = links.length;
-      let uniqueLinks = totalLinks; //falta implementar
+      let uniqueLinks = new Set(links.map(link => link.href)).size;
+      console.log(color.cyanBright('Total: ',totalLinks) + '\n' + color.green('Unique: ',uniqueLinks));
       if(options.validate){
         const brokenLinks = links.filter(link => link.ok === false).length;
-        uniqueLinks = totalLinks-brokenLinks;
-        console.log(color.cyanBright('Total: ',totalLinks) + '\n' + color.green('Unique: ',uniqueLinks) + '\n' + color.red('Broken: ',brokenLinks));
-      }else{
-        console.log(color.cyanBright('Total: ',totalLinks) + '\n' + color.green('Unique: ',uniqueLinks));
+        console.log(color.red('Broken: ', brokenLinks));
       }
     }else{
       links.forEach((link) => {
@@ -52,4 +32,4 @@ function mdLinks(argv){
   .catch(error => console.log(color.bgRed(error)));
 }
 
-mdLinks(argv);
+cliMdLinks(argv);
