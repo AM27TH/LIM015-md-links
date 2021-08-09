@@ -2,9 +2,12 @@ const {
   absolutePath,
   validatePath,
   getMdFiles,
+  readMdFile,
   getMdLinks,
-  //getMdLinksStatus
+  getMdLinksStatus
 } = require('../src/api.js');
+const fetch = require('node-fetch');
+jest.mock('node-fetch');
 
 describe('absolute Path', () => {
   it('should be a function', () => {
@@ -56,6 +59,26 @@ describe('Get Md-files', () => {
   });
 });
 
+describe('readMdFile', () => {
+  it('should be a function', () => {
+    expect(typeof readMdFile).toBe('function');
+  });
+  it('should return an empty array if the md-file is empty', () => {
+    expect(readMdFile(__dirname + '\\files\\empty.md')).toEqual([]);
+  });
+  it('should return md links if the md-file is not empty', () => {
+    const mdLink = [
+      {
+        href: 'https://user-images.githubusercontent.com/110297/42118443-b7a5f1f0-7bc8-11e8-96ad-9cc5593715a6.jpg',
+        text: 'md-links',
+        file: '..\\test\\files\\noEmpty\\link.md',
+        line: 1
+      }
+    ];
+    expect(readMdFile(__dirname + '\\files\\noEmpty\\link.md')).toEqual(mdLink);
+  });
+});
+
 describe('Get Md Links', () => {
   it('should be a function', () => {
     expect(typeof getMdLinks).toBe('function');
@@ -65,55 +88,55 @@ describe('Get Md Links', () => {
       {
         href: 'https://nodejs.org/es/',
         text: 'Node.js',
-        file: __dirname + '/files/links.md',
+        file: '..\\test\\files\\links.md',
         line: 1
       },
       {
         href: 'https://developers.google.com/v8/',
         text: 'motor de JavaScript V8 de Chrome',
-        file: __dirname + '/files/links.md',
+        file: '..\\test\\files\\links.md',
         line: 2
       },
       {
         href: 'https://github.com/markdown-it/markdown-it',
         text: 'markdown-it',
-        file: __dirname + '/files/links.md',
+        file: '..\\test\\files\\links.md',
         line: 17
       },
       {
         href: 'https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Regular_Expressions',
         text: 'expresiones regulares (`RegExp`)',
-        file: __dirname + '/files/links.md',
+        file: '..\\test\\files\\links.md',
         line: 21
       },
       {
         href: 'https://github.com/markedjs/marked',
         text: 'marked',
-        file: __dirname + '/files/links.md',
+        file: '..\\test\\files\\links.md',
         line: 23
       },
       {
         href: 'https://github.com/jsdom/jsdom',
         text: 'JSDOM',
-        file: __dirname + '/files/links.md',
+        file: '..\\test\\files\\links.md',
         line: 24
       },
       {
         href: 'https://github.com/cheeriojs/cheerio',
         text: 'Cheerio',
-        file: __dirname + '/files/links.md',
+        file: '..\\test\\files\\links.md',
         line: 25
       },
       {
         href: 'https://github.com/markedjs/marked',
         text: 'marked',
-        file: __dirname + '/files/links.md',
+        file: '..\\test\\files\\links.md',
         line: 26
       },
       {
         href: 'http://community.laboratoria.la/c/js',
         text: 'foro de la comunidad',
-        file: __dirname + '/files/links.md',
+        file: '..\\test\\files\\links.md',
         line: 29
       },
     ];
@@ -121,5 +144,95 @@ describe('Get Md Links', () => {
   });
   it('should return an empty array if the md-file is empty', () => {
     expect(getMdLinks([__dirname + '/files/empty.md'])).toEqual([]);
+  });
+});
+
+describe('Get Md Links Status', () => {
+  it('should be a function', () => {
+    expect(typeof getMdLinksStatus).toBe('function');
+  });
+  test('status of the mock promise 200', () => {
+    const linkTest = [
+      {
+        href: 'https://user-images.githubusercontent.com/110297/42118443-b7a5f1f0-7bc8-11e8-96ad-9cc5593715a6.jpg',
+        text: 'md-links',
+        file: __dirname + '\\files\\noEmpty\\link.md',
+        line: 1
+      }
+    ];
+    const resolvedLinkTest = [
+      {
+        href: 'https://user-images.githubusercontent.com/110297/42118443-b7a5f1f0-7bc8-11e8-96ad-9cc5593715a6.jpg',
+        text: 'md-links',
+        file: __dirname + '\\files\\noEmpty\\link.md',
+        line: 1,
+        status: 200,
+        ok: true
+      }
+    ];
+    const validateLinkTest = {
+      status: 200,
+      ok: true
+    };
+    fetch.mockResolvedValue(validateLinkTest);
+    return getMdLinksStatus(linkTest).then((data) => {
+      expect(data).toEqual(resolvedLinkTest);
+    });
+  });
+  test('status of the mock promise 404', () => {
+    const linkTest = [
+      {
+        href: 'https://developer.mozilla.org/es/docs/Learn/JavaScript/Building_blocks/Functions',
+        text: 'Funciones — bloques de código reutilizables - MDN',
+        file: '',
+        line: 100
+      }
+    ];
+    const resolvedLinkTest = [
+      {
+        href: 'https://developer.mozilla.org/es/docs/Learn/JavaScript/Building_blocks/Functions',
+        text: 'Funciones — bloques de código reutilizables - MDN',
+        file: '',
+        line: 100,
+        status: 404,
+        ok: false
+      }
+    ];
+    const validateLinkTest = {
+      status: 404,
+      ok: false
+    };
+    fetch.mockResolvedValue(validateLinkTest);
+    return getMdLinksStatus(linkTest).then((data) => {
+      expect(data).toEqual(resolvedLinkTest);
+    });
+  });
+  test('status of the mock promise noStatus', () => {
+    const linkTest = [
+      {
+        href: 'https://nodejs.og/es/',
+        text: 'Node.js',
+        file: __dirname + '\\files\\noEmpty\\brokenLink.md',
+        line: 1,
+      }
+    ];
+    const resolvedLinkTest = [
+      {
+        href: 'https://nodejs.og/es/',
+        text: 'Node.js',
+        file: __dirname + '\\files\\noEmpty\\brokenLink.md',
+        line: 1,
+        status: 'noStatus',
+        ok: false
+      }
+    ];
+    const validateLinkTest = {
+      status: 'noStatus',
+      ok: false
+    };
+    fetch.mockResolvedValue(validateLinkTest);
+    return getMdLinksStatus(linkTest).then((data) => {
+      expect(data).toEqual(resolvedLinkTest);
+    });
   });
 });

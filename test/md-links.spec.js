@@ -1,8 +1,11 @@
-const { mdLinks } = require('../src/mdLinks.js');
+const { mdLinks } = require('../src/index.js');
 
 describe('mdLinks', () => {
   it('should be a function', () => {
     expect(typeof mdLinks).toBe('function');
+  });
+  test('should return an error if path is invalid', () => {
+    return expect(mdLinks(null)).rejects.toMatch('must input a path');
   });
   test('should return an error if path is invalid', () => {
     return expect(mdLinks('./test/files/readme.txt')).rejects.toMatch('Invalid path');
@@ -18,7 +21,7 @@ describe('mdLinks', () => {
       {
         href: 'https://user-images.githubusercontent.com/110297/42118443-b7a5f1f0-7bc8-11e8-96ad-9cc5593715a6.jpg',
         text: 'md-links',
-        file: __dirname + '\\files\\noEmpty\\link.md',
+        file: '..\\test\\files\\noEmpty\\link.md',
         line: 1
       }
     ];
@@ -29,20 +32,12 @@ describe('mdLinks', () => {
       {
         href: 'https://nodejs.og/es/',
         text: 'Node.js',
-        file: __dirname + '\\files\\noEmpty\\brokenLink.md',
+        file: '..\\test\\files\\noEmpty\\brokenLink.md',
         line: 1,
         status: 'noStatus',
         ok: false
-      },
-      {
-        href: 'https://user-images.githubusercontent.com/110297/42118443-b7a5f1f0-7bc8-11e8-96ad-9cc5593715a6.jpg',
-        text: 'md-links',
-        file: __dirname + '\\files\\noEmpty\\link.md',
-        line: 1,
-        status: 200,
-        ok: true
       }
     ];
-    return expect(mdLinks('./test/files/noEmpty', {validate: true})).resolves.toEqual(mdLinksStatus);
+    return expect(mdLinks('./test/files/noEmpty/brokenLink.md', {validate: true})).resolves.toEqual(mdLinksStatus);
   });
 });
