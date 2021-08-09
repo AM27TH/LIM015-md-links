@@ -1,8 +1,8 @@
 {
   "name": "am27th-mdlinks",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Library that checks the status of links in md files",
-  "main": "src/mdLinks.js",
+  "main": "src/index.js",
   "bin": {
     "md-links": "src/cli.js"
   },
@@ -21,7 +21,11 @@
   },
   "keywords": [
     "node",
-    "md"
+    "md",
+    "chalk",
+    "node-fetch",
+    "jest",
+    "eslint"
   ],
   "author": "Anghel Melanie Trillo Hernández <amelanie.trillo27@gmail.com> (https://github.com/AM27TH)",
   "license": "MIT",
