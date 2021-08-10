@@ -11,7 +11,7 @@
   - [Instalación](#instalación)
   - [Librería](#utilizalo-como-librería)
   - [Interfaz de Línea de Comando](#utilizalo-como-interfaz-de-línea-de-comando)
-  
+
 ---
 
 ## Preámbulo
