@@ -11,6 +11,7 @@
   - [Instalación](#instalación)
   - [Librería](#utilizalo-como-librería)
   - [Interfaz de Línea de Comando](#utilizalo-como-interfaz-de-línea-de-comando)
+  
 ---
 
 ## Preámbulo
@@ -39,9 +40,13 @@ md-links es una librería desarrollada con [Node.js](https://nodejs.org/es/), qu
 Instala la librería con npm:
 
 ```bash
-npm install am27th-mdlinks
+npm i am27th-mdlinks
 ```
 
+Instala la librería con github:
+```bash
+npm install AM27TH/LIM015-md-links
+```
 ### Utilizalo como Librería
 
 ```js
