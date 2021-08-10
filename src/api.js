@@ -21,7 +21,7 @@ const readMdFile = (mdFilePath) => {
   const regexText = /\[[^\s]+(.+?)\]/gi;
   const regexLink = /\((https?.+?)\)/gi;
   const readMdFile = fs.readFileSync(mdFilePath, 'utf-8');
-  const mdLines = readMdFile.split('\r\n');
+  const mdLines = readMdFile.split('\n');
   return mdLines.reduce((accumulator, line) => {
     if(!line.match(regexLine)) return accumulator;
     const mdLinkHref = line.match(regexLink).join().slice(1, -1);

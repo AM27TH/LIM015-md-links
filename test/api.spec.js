@@ -7,7 +7,6 @@ const {
   getMdLinksStatus
 } = require('../src/api.js');
 const fetch = require('node-fetch');
-jest.mock('node-fetch');
 
 describe('absolute Path', () => {
   it('should be a function', () => {
@@ -216,7 +215,7 @@ describe('Get Md Links Status', () => {
         line: 1,
       }
     ];
-    const resolvedLinkTest = [
+    const rejectedLinkTest = [
       {
         href: 'https://nodejs.og/es/',
         text: 'Node.js',
@@ -230,9 +229,9 @@ describe('Get Md Links Status', () => {
       status: 'noStatus',
       ok: false
     };
-    fetch.mockResolvedValue(validateLinkTest);
+    fetch.mockRejectedValue(validateLinkTest);
     return getMdLinksStatus(linkTest).then((data) => {
-      expect(data).toEqual(resolvedLinkTest);
+      expect(data).toEqual(rejectedLinkTest);
     });
   });
 });

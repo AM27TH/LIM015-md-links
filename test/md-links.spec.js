@@ -1,4 +1,5 @@
 const { mdLinks } = require('../src/index.js');
+const fetch = require('node-fetch');
 
 describe('mdLinks', () => {
   it('should be a function', () => {
@@ -38,6 +39,7 @@ describe('mdLinks', () => {
         ok: false
       }
     ];
+    fetch.mockRejectedValue({status: 'noStatus', ok: false });
     return expect(mdLinks('./test/files/noEmpty/brokenLink.md', {validate: true})).resolves.toEqual(mdLinksStatus);
   });
 });
