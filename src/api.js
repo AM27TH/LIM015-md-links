@@ -20,19 +20,24 @@ const readMdFile = (mdFilePath) => {
   const regexLine = /!*\[(.+?)\]\((https?.+?)\)/gi;
   const regexText = /\[[^\s]+(.+?)\]/gi;
   const regexLink = /\((https?.+?)\)/gi;
-  const readMdFile = fs.readFileSync(mdFilePath, 'utf-8');
-  const mdLines = readMdFile.split('\n');
+  const mdFile = fs.readFileSync(mdFilePath, 'utf-8');
+  const mdLines = mdFile.split('\n');
   return mdLines.reduce((accumulator, line) => {
-    if(!line.match(regexLine)) return accumulator;
-    const mdLinkHref = line.match(regexLink).join().slice(1, -1);
-    const mdLinkText = line.match(regexText).join().slice(1, -1).substring(0,50);
-    const mdLinkLine = mdLines.indexOf(line) + 1;
-    return accumulator.concat({
-      href: mdLinkHref,
-      text: mdLinkText,
-      file: path.relative(__dirname, mdFilePath),
-      line: mdLinkLine
-    });
+    const lines = line.match(regexLine);
+    if(!lines) return accumulator;
+    return accumulator.concat(
+      lines.reduce((accumulator2, link) => {
+      const mdLinkHref = link.match(regexLink).join().slice(1, -1);
+      const mdLinkText = link.match(regexText).join().slice(1, -1).substring(0,50);
+      const mdLinkLine = mdLines.indexOf(line) + 1;
+      return accumulator2.concat({
+        href: mdLinkHref,
+        text: mdLinkText,
+        file: path.relative(__dirname, mdFilePath),
+        line: mdLinkLine
+      });
+      }, [])
+    );
   }, []);
 };
 

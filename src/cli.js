@@ -2,7 +2,8 @@
 const process = require('process');
 const color = require('chalk');
 const API = require('./index.js');
-const { commandOptions }= require('./options.js');
+const { commandOptions } = require('./options.js');
+const { uniqueLinks, brokenLinks, noStatusLinks} = require('./stats.js');
 const { helpMessage } = require('./messages.js');
 
 const argv = process.argv;
@@ -15,13 +16,11 @@ function cliMdLinks(argv){
   .then(links => {
     if (options.stats) {
       const totalLinks = links.length;
-      let uniqueLinks = new Set(links.map(link => link.href)).size;
-      console.log(color.cyanBright('Total: ',totalLinks) + '\n' + color.green('Unique: ',uniqueLinks));
+      console.log(color.cyanBright('Total: ',totalLinks) + '\n' + color.green('Unique: ', uniqueLinks(links)));
       if(options.validate){
-        const brokenLinks = links.filter(link => link.ok === false).length;
-        console.log(color.red('Broken: ', brokenLinks));
+        console.log(color.red('Broken: ', brokenLinks(links)) + '\n' + color.redBright('Links without status: ', noStatusLinks(links)));
       }
-    }else{
+    }else {
       links.forEach((link) => {
         console.log(color.magenta(link.file), color.cyan(link.href),
           (options.validate)?((link.ok)? color.green('ok', link.status): color.red('fail', link.status)): '',

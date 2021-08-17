@@ -86,7 +86,7 @@ Exporta la función mdLinks(\<path>,\<options>) este retorna una promesa, donde 
 
 ##### Ejemplo de uso:
 ```js
-mdlinks("./some/example.md", { validate: false })
+mdLinks("./some/example.md", { validate: false })
   .then(links => {
     // => [{ href, text, file }]
   })
@@ -147,12 +147,14 @@ Total: 3
 Unique: 3
 ```
 
+##### `--stats --validate`
 También podemos combinar `--stats` y `--validate` para obtener estadísticas que necesiten de los resultados de la validación.
 
 ```bash
-$ md-links ./some/example.md --stats
+$ md-links ./some/example.md --stats --validate
 Total: 3
 Unique: 3
 Broken: 2
+Links without status:  1
 ```
 ---
